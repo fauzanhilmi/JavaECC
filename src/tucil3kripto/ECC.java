@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+import javax.swing.JFrame;
 /**
  *
  * @author Riady
@@ -49,6 +49,11 @@ public class ECC {
         //c.generate();
         //byte b = 4;
         //System.out.println(c.decodeKob(c.encodeKob(b)));
+   /*     ECC c = new ECC(9,7,4093);
+        c.generate();
+        byte b = 4;
+        System.out.println(c.decodeKob(c.encodeKob(b)));*/
+
       /*  Point p1 = new Point(2,4);
         Point p2 = new Point(5,9);
         Point pi = new Point(); pi.makeInfinity();
@@ -63,6 +68,12 @@ public class ECC {
         }
         System.out.println(Pr.x+" "+Pr.y);*/
         //c.generate();    
+        JFrame a = new JFrame();
+        View n = new View();
+        n.init();
+        a.getContentPane().add(n);
+        a.pack();
+        a.setVisible(true);
     }
     
     public ECC(){
@@ -74,6 +85,7 @@ public class ECC {
         b=_b;
         p=_p;
         arrP = new ArrayList();
+        generate();
     }
     
     private long mod(long l1, long l2) {
@@ -257,33 +269,18 @@ public class ECC {
     }
     
     public void generate(){
-      /*  for(long x=0;x<p;x++){
-            long y2 = ((long) Math.pow(x, 3))+ a*x+b;
-            if(isPerfectSquare(y2)||isPerfectSquare(mod(y2,p))){
-                for(long i = 0 ; i<p;i++){
-                    if(mod(i*i,p) == mod(y2,p)){
-                        arrP.add(new Point(x,i));
-                        System.out.println(x+" "+i);
-                        arrP.add(new Point(x,p-i));
-                        System.out.println(x+" "+(p-i));
-                        break;
-                    }
-                }
-            }
-        }*/
+      
         for(long x = 0 ; x<p;x++){
             for(long y=0;y<p;y++){
                 if(mod(y*y,p)==mod((((long) Math.pow(x, 3))+ a*x+b),p)){
                     arrP.add(new Point(x,y));
-                    //System.out.println(x+" "+y);
+
                     arrP.add(new Point(x,p-y));
-                    //System.out.println(x+" "+(p-y));
                     break;
                 
                 }
             }
         }
-        //System.out.println(arrP.size());
     } 
     
     public Point encodeKob(byte b){
