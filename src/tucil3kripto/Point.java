@@ -13,7 +13,8 @@ package tucil3kripto;
 public class Point {
     public long x,y;
     Point(){
-    
+        x = 0;
+        y = 0;
     }
     Point(long _x,long _y){
         x=_x;
