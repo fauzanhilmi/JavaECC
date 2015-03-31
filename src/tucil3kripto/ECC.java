@@ -8,6 +8,7 @@ package tucil3kripto;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -25,16 +26,25 @@ public class ECC {
     
     public static void main(String[] argv){
         //ECC c = new ECC(1,2,((long)Math.pow(2, 31))-1);
-        //ECC c = new ECC(9,7,4093);
-        ECC c = new ECC(1,6,11);
+        ECC c = new ECC(9,7,4093);
+        //ECC c = new ECC(1,6,11);
         
         String text = "a d;fjdf qoiuo 804402389 ";
         Point p = new Point(0,0);
         long b = 2;
-        ArrayList<PairPoint> ListPoint = new ArrayList<>(c.Encipher(text, 10, b));
-        for(int i=0; i<ListPoint.size(); i++) {
-            //System.out.println("("+ListPoint.get(i).p1.x+","+ListPoint.get(i).p1.y+") ("+ListPoint.get(i).p2.x+","+ListPoint.get(i).p2.y+")");
+        byte[] Arrbyte = text.getBytes(Charset.forName("UTF-8"));
+        ArrayList<PairPoint> ListPoint = new ArrayList<>(c.Encipher(Arrbyte, 10, b));
+        
+        //decipher
+        byte[] Listbyte = c.Decipher(ListPoint, b);
+        String str;
+        try {
+            str = new String(Listbyte,"UTF-8");
+            System.out.println(str);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(ECC.class.getName()).log(Level.SEVERE, null, ex);
         }
+       
         
         /*long k = 3;
         Point B = new Point(5,10);
@@ -68,12 +78,12 @@ public class ECC {
         }
         System.out.println(Pr.x+" "+Pr.y);*/
         //c.generate();    
-        JFrame a = new JFrame();
+        /*JFrame a = new JFrame();
         View n = new View();
         n.init();
         a.getContentPane().add(n);
         a.pack();
-        a.setVisible(true);
+        a.setVisible(true);*/
     }
     
     public ECC(){
@@ -222,8 +232,8 @@ public class ECC {
     }
     
     //public void Encipher(String text, long k, Point Pb) {
-    public ArrayList<PairPoint> Encipher(String text, long k, long b) {
-        byte[] Arrbyte = text.getBytes();
+    public ArrayList<PairPoint> Encipher(byte[] Arrbyte, long k, long b) {
+        //byte[] Arrbyte = text.getBytes();
         this.generate();
         ArrayList<Point> ListPoint = new ArrayList<>();
         for(int i=0; i<Arrbyte.length; i++) {
@@ -259,8 +269,22 @@ public class ECC {
         
     }
     
-    public void Decipher() {
-        
+    public byte[] Decipher(ArrayList<PairPoint> ListPair, long b) {
+        ArrayList<Point> ListSolP = new ArrayList<>();
+        for(int i=0; i<ListPair.size(); i++) {
+            Point pkanan = new Point();
+            pkanan = this.Multiply(ListPair.get(i).p1,b);
+            ListSolP.add( this.Substract(ListPair.get(i).p2, pkanan) );
+            /*if(this.Substract(ListPair.get(i).p2, pkanan).isInfinity()) {
+                System.out.println("("+ListPair.get(i).p2.x+","+ListPair.get(i).p2.y+") - ("+pkanan.x+","+pkanan.y+") = ("+this.Substract(ListPair.get(i).p2, pkanan).x+","+this.Substract(ListPair.get(i).p2, pkanan).y);
+            }*/
+        }
+        byte[] ListByte = new byte[ListSolP.size()];
+        for(int i=0; i<ListSolP.size(); i++) {
+            Point p = ListSolP.get(i);
+            ListByte[i] = decodeKob(p);
+        }
+        return ListByte;
     }
     
     public Point iterate(long n){
