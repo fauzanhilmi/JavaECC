@@ -6,8 +6,12 @@
 
 package tucil3kripto;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -21,10 +25,30 @@ public class ECC {
     
     public static void main(String[] argv){
         //ECC c = new ECC(1,2,((long)Math.pow(2, 31))-1);
-        ECC c = new ECC(9,7,4093);
-        c.generate();
-        byte b = 4;
-        System.out.println(c.decodeKob(c.encodeKob(b)));
+        //ECC c = new ECC(9,7,4093);
+        ECC c = new ECC(1,6,11);
+        
+        String text = "a d;fjdf qoiuo 804402389 ";
+        Point p = new Point(0,0);
+        long b = 2;
+        ArrayList<PairPoint> ListPoint = new ArrayList<>(c.Encipher(text, 10, b));
+        for(int i=0; i<ListPoint.size(); i++) {
+            //System.out.println("("+ListPoint.get(i).p1.x+","+ListPoint.get(i).p1.y+") ("+ListPoint.get(i).p2.x+","+ListPoint.get(i).p2.y+")");
+        }
+        
+        /*long k = 3;
+        Point B = new Point(5,10);
+        Point pm = new Point(10,10);
+        Point pb = new Point(5,5);
+        System.out.println(c.EncipherByte(k, B, pm, pb).p1.x+" "+c.EncipherByte(k, B, pm, pb).p1.y);
+        System.out.println(c.EncipherByte(k, B, pm, pb).p2.x+" "+c.EncipherByte(k, B, pm, pb).p2.y);*/
+        
+        
+        
+        
+        //c.generate();
+        //byte b = 4;
+        //System.out.println(c.decodeKob(c.encodeKob(b)));
       /*  Point p1 = new Point(2,4);
         Point p2 = new Point(5,9);
         Point pi = new Point(); pi.makeInfinity();
@@ -81,6 +105,17 @@ public class ECC {
         if(P2.x==P1.x) {
             Pr.makeInfinity();
         }
+        else if(P1.isInfinity() || P2.isInfinity()) {
+            if(P1.isInfinity() && P2.isInfinity()) {
+                Pr.makeInfinity();
+            }
+            else if(P1.isInfinity()) {
+                Pr.x = P2.x ; Pr.y = P2.y;
+            }
+            else {
+                Pr.x = P1.x; Pr.y = P1.y;
+            }
+        }
         else {
             long gr = this.gradient(P1,P2);
             x = mod((((long)Math.pow(gr,2)) - P1.x - P2.x),p);
@@ -94,36 +129,49 @@ public class ECC {
     public Point Substract(Point P1, Point Pp2) { //UNTESTED
         Point P2 = new Point(Pp2.x,mod((-1*Pp2.y),p));
         long x,y;
-        long gr = this.gradient(P1,P2);
-        x = mod((((long)Math.pow(gr,2)) - P1.x - P2.x),p);
-        y = mod(((gr*(P1.x-x)) - P1.y),p);
-        //System.out.println(gr+"("+P1.x+"-"+x+")"+"-"+P1.y+" mod "+p+" = "+y);
-        Point Pr = new Point(x,y);
+        Point Pr = new Point();
+        Pr = this.Add(P1, P2);
+        /*if(P2.x==P1.x || P1.isInfinity() || P2.isInfinity()) {
+            Pr.makeInfinity();
+        }
+        if(P1.isInfinity()||P2.isInfinity()) {
+            if(P1.isInfinity() && P2.isInfinity()) {
+                Pr.makeInfinity();
+            }
+            else if(P1.isInfinity()) {
+                Pr.x = P2.x; Pr.y = P2.y;
+            }
+            else {
+                Pr.x
+            }
+        }
+        else {
+            long gr = this.gradient(P1,P2);
+            x = mod((((long)Math.pow(gr,2)) - P1.x - P2.x),p);
+            y = mod(((gr*(P1.x-x)) - P1.y),p);
+            //System.out.println(gr+"("+P1.x+"-"+x+")"+"-"+P1.y+" mod "+p+" = "+y);
+            Pr.x = x; Pr.y = y;
+        }*/
         return Pr;
     }
     
     public Point Double(Point P1) {
         long gr = -1;
         Point Pr = new Point();
-        if(P1.y==0) {
+        if(P1.y==0 || P1.isInfinity()) {
             Pr.makeInfinity();
         }
         else {
-            long atas = (3*(long)Math.pow(P1.x,2))+a; //System.out.println(atas);
-            long bawah = 2*P1.y; //System.out.println(bawah);
-            //BigInteger Batas = BigInteger.valueOf(atas);
+            long atas = (3*(long)Math.pow(P1.x,2))+a; 
+            long bawah = 2*P1.y;
             BigInteger Bbawah = BigInteger.valueOf(bawah);
             BigInteger Bp = BigInteger.valueOf(p);
-            //System.out.println(bx1.toString()+" "+bp.toString());
             Bbawah = Bbawah.modInverse(Bp);
-            bawah = Bbawah.longValue(); //System.out.println(bawah);
-            gr = mod((atas * bawah),p);  //System.out.println(gr);
-            //System.out.println(gr);
+            bawah = Bbawah.longValue(); 
+            gr = mod((atas * bawah),p); 
             long x = mod((long)Math.pow(gr,2)-(P1.x*2),p);
             long y = mod((gr*(P1.x-x))-P1.y,p);
             Pr.x = x; Pr.y = y;
-            //Long lBawah = Bbawah.longValue();
-            //long bawah = lBawah;
         }
         return Pr;
     }   
@@ -139,19 +187,68 @@ public class ECC {
             }
         }
         return Pr;
-        /*Point Pold = P;
-        Point Pr = new Point();
-        if(P.y==0) Pr.makeInfinity();
-        else {
-            for(int i=0; i<k; i++) {
-                Pr = Add(Pr,Pold);
-                if(Pr.y==0) {
-                    Pr.makeInfinity();
-                    break;
-                }
+    }
+    
+    //public ArrayList<Point> EncipherByte(long k, Point B, Point Pm, Point Pb) {
+    public PairPoint EncipherByte(long k, Point B, Point Pm, long b) {
+        Point Pb = new Point();
+        Pb = this.Multiply(B,b);
+        //Point Pb = new Point(this.Multiply(B.x,b),this.Multiply( B.y,b));
+        //ArrayList<Point> pp = new ArrayList<>();
+        PairPoint pp = new PairPoint();
+        Point P1 = new Point();
+        Point P2 = new Point();
+        //P1.x = B.x * k; 
+        //P1.y=B.y * k;
+        P1 = this.Multiply(B, k);
+        //P2.x = (Pm.x+(k*Pb.x));
+        //P2.y = (Pm.y+(k*Pb.y));
+        P2 = this.Add(Pm, this.Multiply(Pb,k));
+        pp.p1 = P1;
+        pp.p2 = P2;
+        return pp;
+    }
+    
+    //public void Encipher(String text, long k, Point Pb) {
+    public ArrayList<PairPoint> Encipher(String text, long k, long b) {
+        byte[] Arrbyte = text.getBytes();
+        this.generate();
+        ArrayList<Point> ListPoint = new ArrayList<>();
+        for(int i=0; i<Arrbyte.length; i++) {
+            ListPoint.add(this.encodeKob(Arrbyte[i])); //only (2,4)
+        }
+        /*for(int i=0; i<ListPoint.size(); i++) {
+            System.out.println(ListPoint.get(i).x+" "+ListPoint.get(i).y);
+        }*/
+        //System.out.println(ListPoint.get(0).x+" "+ListPoint.get(0).y);
+        Point B = arrP.get(0); //(2,4)
+        //Point Pb = new Point(B.x*b, B.y*b);
+        ArrayList<PairPoint> ListPair = new ArrayList<>();
+        for(int i=0; i<ListPoint.size(); i++) {
+            ListPair.add(this.EncipherByte(k, B, ListPoint.get(i), b));
+        }
+        //System.out.println(ListPair.size());
+        System.out.println("");
+        //nyoba decipher
+        ArrayList<Point> ListSolP = new ArrayList<>();
+        for(int i=0; i<ListPair.size(); i++) {
+            Point pkanan = new Point();
+            pkanan = this.Multiply(ListPair.get(i).p1,b);
+            ListSolP.add( this.Substract(ListPair.get(i).p2, pkanan) );
+            if(this.Substract(ListPair.get(i).p2, pkanan).isInfinity()) {
+                System.out.println("("+ListPair.get(i).p2.x+","+ListPair.get(i).p2.y+") - ("+pkanan.x+","+pkanan.y+") = ("+this.Substract(ListPair.get(i).p2, pkanan).x+","+this.Substract(ListPair.get(i).p2, pkanan).y);
             }
         }
-        return Pr;*/
+        /*for(int i=0; i<ListSolP.size(); i++) {
+            System.out.print(ListPoint.get(i).x+" "+ListPoint.get(i).y+" | ");
+            System.out.println(ListSolP.get(i).x+" "+ListSolP.get(i).y);
+        }*/
+        return ListPair;
+        
+    }
+    
+    public void Decipher() {
+        
     }
     
     public Point iterate(long n){
@@ -178,15 +275,15 @@ public class ECC {
             for(long y=0;y<p;y++){
                 if(mod(y*y,p)==mod((((long) Math.pow(x, 3))+ a*x+b),p)){
                     arrP.add(new Point(x,y));
-                    System.out.println(x+" "+y);
+                    //System.out.println(x+" "+y);
                     arrP.add(new Point(x,p-y));
-                    System.out.println(x+" "+(p-y));
+                    //System.out.println(x+" "+(p-y));
                     break;
                 
                 }
             }
         }
-        System.out.println(arrP.size());
+        //System.out.println(arrP.size());
     } 
     
     public Point encodeKob(byte b){
