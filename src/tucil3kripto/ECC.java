@@ -17,11 +17,14 @@ public class ECC {
     public Point base;
     public long a,b,p;
     public ArrayList<Point> arrP;
+    public long k = 10;
     
     public static void main(String[] argv){
         //ECC c = new ECC(1,2,((long)Math.pow(2, 31))-1);
-        ECC c = new ECC(9,7,2011);
+        ECC c = new ECC(9,7,4093);
         c.generate();
+        byte b = 4;
+        System.out.println(c.decodeKob(c.encodeKob(b)));
       /*  Point p1 = new Point(2,4);
         Point p2 = new Point(5,9);
         Point Pr = c.Add(p1, p2);
@@ -143,6 +146,21 @@ public class ECC {
         System.out.println(arrP.size());
     } 
     
+    public Point encodeKob(byte b){
+        long x = mod(unsignedToBytes(b)*k,p);
+        
+        for(int i=0;i<arrP.size();i++){
+            if(arrP.get(i).x>=x){
+                return arrP.get(i);
+            }
+        }
+        return (new Point(0,0));
+    }
+    
+    public byte decodeKob(Point P){
+        return (byte) (P.x/k);
+    }
+    
     private boolean isPerfectSquare(long n)
     {
       if (n < 0)
@@ -152,4 +170,8 @@ public class ECC {
       return tst*tst == n;
     }
     
+    
+    public int unsignedToBytes(byte b) {
+    return b & 0xFF;
+  }
 }
