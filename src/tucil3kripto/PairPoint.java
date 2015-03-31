@@ -14,8 +14,8 @@ public class PairPoint {
     public Point p2;
     
     public PairPoint() {
-        p1 = null; 
-        p2 = null;
+        p1 = new Point(); 
+        p2 = new Point();
     }
     
     public PairPoint(Point _p1, Point _p2) {

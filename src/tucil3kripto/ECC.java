@@ -26,7 +26,7 @@ public class ECC {
     
     public static void main(String[] argv){
         //ECC c = new ECC(1,2,((long)Math.pow(2, 31))-1);
-        ECC c = new ECC(9,7,4093);
+       /* ECC c = new ECC(9,7,4093);
         //ECC c = new ECC(1,6,11);
         
         String text = "a d;fjdf qoiuo 804402389 ";
@@ -45,7 +45,7 @@ public class ECC {
             Logger.getLogger(ECC.class.getName()).log(Level.SEVERE, null, ex);
         }
        
-        
+        */
         /*long k = 3;
         Point B = new Point(5,10);
         Point pm = new Point(10,10);
@@ -78,12 +78,12 @@ public class ECC {
         }
         System.out.println(Pr.x+" "+Pr.y);*/
         //c.generate();    
-        /*JFrame a = new JFrame();
+        JFrame a = new JFrame();
         View n = new View();
         n.init();
         a.getContentPane().add(n);
         a.pack();
-        a.setVisible(true);*/
+        a.setVisible(true);
     }
     
     public ECC(){
@@ -212,9 +212,8 @@ public class ECC {
     }
     
     //public ArrayList<Point> EncipherByte(long k, Point B, Point Pm, Point Pb) {
-    public PairPoint EncipherByte(long k, Point B, Point Pm, long b) {
-        Point Pb = new Point();
-        Pb = this.Multiply(B,b);
+    public PairPoint EncipherByte(long k, Point B, Point Pm, Point Pb) {
+
         //Point Pb = new Point(this.Multiply(B.x,b),this.Multiply( B.y,b));
         //ArrayList<Point> pp = new ArrayList<>();
         PairPoint pp = new PairPoint();
@@ -232,7 +231,7 @@ public class ECC {
     }
     
     //public void Encipher(String text, long k, Point Pb) {
-    public ArrayList<PairPoint> Encipher(byte[] Arrbyte, long k, long b) {
+    public ArrayList<PairPoint> Encipher(byte[] Arrbyte, long k, Point Pb) {
         //byte[] Arrbyte = text.getBytes();
         this.generate();
         ArrayList<Point> ListPoint = new ArrayList<>();
@@ -247,7 +246,7 @@ public class ECC {
         //Point Pb = new Point(B.x*b, B.y*b);
         ArrayList<PairPoint> ListPair = new ArrayList<>();
         for(int i=0; i<ListPoint.size(); i++) {
-            ListPair.add(this.EncipherByte(k, B, ListPoint.get(i), b));
+            ListPair.add(this.EncipherByte(k, B, ListPoint.get(i), Pb));
         }
         //System.out.println(ListPair.size());
         System.out.println("");

@@ -32,6 +32,8 @@ public class View extends javax.swing.JApplet {
     /**
      * Initializes the applet View
      */
+    
+    private long a,b,p;
     private long privateKey;
     private Point publicKey;
     
@@ -102,6 +104,7 @@ public class View extends javax.swing.JApplet {
     private void initComponents() {
 
         jLabel6 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
         fileButton = new javax.swing.JToggleButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         inputArea = new javax.swing.JTextArea();
@@ -120,14 +123,17 @@ public class View extends javax.swing.JApplet {
         privateLabel = new javax.swing.JLabel();
         publicLabel = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
         jScrollPane3 = new javax.swing.JScrollPane();
         outputArea = new javax.swing.JTextArea();
         jLabel8 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
+        timeLabel = new javax.swing.JLabel();
+        inputLabel = new javax.swing.JLabel();
+        outputLabel = new javax.swing.JLabel();
 
         jLabel6.setText("jLabel6");
+
+        jLabel9.setText("jLabel9");
 
         fileButton.setText("Select file Encrypt");
         fileButton.addActionListener(new java.awt.event.ActionListener() {
@@ -179,10 +185,6 @@ public class View extends javax.swing.JApplet {
 
         jLabel7.setText("Input : ");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
-
         outputArea.setColumns(20);
         outputArea.setRows(5);
         jScrollPane3.setViewportView(outputArea);
@@ -190,6 +192,17 @@ public class View extends javax.swing.JApplet {
         jLabel8.setText("Output :");
 
         jButton2.setText("Select File Decrypt");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        timeLabel.setText("Time : ");
+
+        inputLabel.setText("Size Input :");
+
+        outputLabel.setText("Size output :");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -199,56 +212,57 @@ public class View extends javax.swing.JApplet {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(46, 46, 46)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(privateBut)
-                                    .addComponent(privateLabel))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(publicLabel))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(fileButton)
                                     .addGap(18, 18, 18)
                                     .addComponent(jButton2))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jLabel7)
-                                        .addComponent(jLabel8))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(privateBut)
+                                        .addComponent(privateLabel))
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
-                                        .addComponent(jScrollPane3))))))
+                                    .addComponent(publicLabel)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel8))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(timeLabel)
+                                    .addComponent(inputLabel)
+                                    .addComponent(outputLabel)))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel2)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGap(24, 24, 24)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(publicBut)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                .addComponent(jLabel3)
-                                                .addComponent(jLabel1))
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                .addComponent(aField, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
-                                                .addComponent(privateKeyField))
-                                            .addGap(53, 53, 53)
-                                            .addComponent(jLabel4)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGroup(layout.createSequentialGroup()
-                                                    .addComponent(bField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addGap(42, 42, 42)
-                                                    .addComponent(jLabel5)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                    .addComponent(pField, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addComponent(generateBut))))))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(59, Short.MAX_VALUE))
+                            .addComponent(jLabel2)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(24, 24, 24)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel3)
+                                            .addComponent(jLabel1))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(aField, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
+                                            .addComponent(privateKeyField))
+                                        .addGap(53, 53, 53)
+                                        .addComponent(jLabel4)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(bField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(42, 42, 42)
+                                                .addComponent(jLabel5)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(pField, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(generateBut)))
+                                    .addComponent(publicBut))))))
+                .addContainerGap(53, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -275,22 +289,27 @@ public class View extends javax.swing.JApplet {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(privateLabel)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(publicLabel)
-                        .addGap(8, 8, 8)
-                        .addComponent(jLabel7))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addComponent(publicLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(timeLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(inputLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(outputLabel)
+                .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(33, 33, 33)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(fileButton)
-                            .addComponent(jButton2)))
-                    .addComponent(jLabel8)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(33, 33, 33)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(fileButton)
+                                    .addComponent(jButton2)))
+                            .addComponent(jLabel8)))
+                    .addComponent(jLabel7)))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -305,14 +324,20 @@ public class View extends javax.swing.JApplet {
                 byte[] data = Files.readAllBytes(file.toPath());
                 inputArea.setText(readFile(file.getAbsolutePath(), StandardCharsets.UTF_8));
                 //data di encrypt dlu
+                
+                
+                ECC ecc = new ECC(a,b,p);
+                
+                ArrayList<PairPoint> ar = ecc.Encipher(data, 6, publicKey);
+                
                 String c = bytesToHex(data);
                 outputArea.setText(c);
-                ArrayList<PairPoint> ar= new ArrayList<PairPoint>();
                 
                 PrintWriter pw = new PrintWriter("encipher.txt","UTF-8");
                 
                 for(int i=0;i<ar.size();i++){
                     pw.println(ar.get(i).p1.x);
+                    
                     pw.println(ar.get(i).p1.y);
                     pw.println(ar.get(i).p2.x);
                     pw.println(ar.get(i).p2.y);
@@ -364,12 +389,12 @@ public class View extends javax.swing.JApplet {
         int returnVal = jc.showOpenDialog((Component)evt.getSource());
         if(returnVal == JFileChooser.APPROVE_OPTION){
             file = jc.getSelectedFile();
-            privateLabel.setText(file.getName());
+      //      privateLabel.setText(file.getName());
             try {
                 BufferedReader br = new BufferedReader(new FileReader(file));
-                long a = Long.parseLong(br.readLine());
-                long b = Long.parseLong(br.readLine());
-                long p = Long.parseLong(br.readLine());
+                a = Long.parseLong(br.readLine());
+                b = Long.parseLong(br.readLine());
+                p = Long.parseLong(br.readLine());
                 privateKey = Long.parseLong(br.readLine());
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
@@ -386,12 +411,12 @@ public class View extends javax.swing.JApplet {
         int returnVal = jc.showOpenDialog((Component)evt.getSource());
         if(returnVal == JFileChooser.APPROVE_OPTION){
             file = jc.getSelectedFile();
-            publicLabel.setText(file.getName());
+        //    publicLabel.setText(file.getName());
             try {
                 BufferedReader br = new BufferedReader(new FileReader(file));
-                long a = Long.parseLong(br.readLine());
-                long b = Long.parseLong(br.readLine());
-                long p = Long.parseLong(br.readLine());
+                a = Long.parseLong(br.readLine());
+                b = Long.parseLong(br.readLine());
+                p = Long.parseLong(br.readLine());
                 long x = Long.parseLong(br.readLine());
                 long y = Long.parseLong(br.readLine());
                 publicKey = new Point(x,y);
@@ -403,6 +428,58 @@ public class View extends javax.swing.JApplet {
         }
     }//GEN-LAST:event_publicButActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        File file;
+        JFileChooser jc = new JFileChooser();
+        int returnVal = jc.showOpenDialog((Component)evt.getSource());
+        if(returnVal == JFileChooser.APPROVE_OPTION){
+            file = jc.getSelectedFile();
+            publicLabel.setText(file.getName());
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(file));
+                String temp;
+                int i=0;
+                PairPoint tempPair = new PairPoint();
+                ArrayList<PairPoint> arrP = new ArrayList();
+                while((temp=br.readLine())!=null){
+
+                    tempPair = new PairPoint();
+                    tempPair.p1.x = Long.parseLong(temp);
+
+                    temp=br.readLine();
+                    tempPair.p1.y = Long.parseLong(temp);
+
+                    temp=br.readLine();
+                    tempPair.p2.x = Long.parseLong(temp);
+
+                    temp=br.readLine();
+                    tempPair.p2.y = Long.parseLong(temp);
+                    arrP.add(tempPair);
+
+                }
+                ECC ecc = new ECC(a,b,p);
+                byte[] data = ecc.Decipher(arrP,privateKey);
+                System.out.println(a+" "+b+" "+p);
+
+                String s = new String(data,"UTF-8");
+
+                outputArea.setText(s);
+
+                PrintWriter pw = new PrintWriter("decipher.txt","UTF-8");
+
+                pw.println(s);
+
+                pw.close();
+
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField aField;
@@ -410,6 +487,7 @@ public class View extends javax.swing.JApplet {
     private javax.swing.JToggleButton fileButton;
     private javax.swing.JButton generateBut;
     private javax.swing.JTextArea inputArea;
+    private javax.swing.JLabel inputLabel;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -419,16 +497,17 @@ public class View extends javax.swing.JApplet {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea outputArea;
+    private javax.swing.JLabel outputLabel;
     private javax.swing.JTextField pField;
     private javax.swing.JButton privateBut;
     private javax.swing.JTextField privateKeyField;
     private javax.swing.JLabel privateLabel;
     private javax.swing.JButton publicBut;
     private javax.swing.JLabel publicLabel;
+    private javax.swing.JLabel timeLabel;
     // End of variables declaration//GEN-END:variables
 }
