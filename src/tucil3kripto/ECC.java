@@ -28,9 +28,16 @@ public class ECC {
         System.out.println(c.decodeKob(c.encodeKob(b)));*/
       /*  Point p1 = new Point(2,4);
         Point p2 = new Point(5,9);
+        Point pi = new Point(); pi.makeInfinity();
         Point Pr = c.Add(p1, p2);
-        //Point Pr = c.Substract(p1, p2);
+        //Point Pr = c.Substract(p1, pi);
         //Point Pr = c.Multiply(p1,2);
+        //Point Pr = c.Double(p1);
+        //System.out.println(Pr.x+" "+Pr.y);
+        for(int i=1; i<14; i++) {
+            Pr = c.Multiply(p1,i);
+            System.out.println(Pr.x+" "+Pr.y);
+        }
         System.out.println(Pr.x+" "+Pr.y);*/
         //c.generate();    
         JFrame a = new JFrame();
@@ -61,7 +68,7 @@ public class ECC {
 
     private long gradient (Point P1, Point P2) {
        long gr = -1;
-       long atas = (P2.y-P1.y);
+       long atas = (P2.y-P1.y)  ;
        BigInteger bx1 = BigInteger.valueOf(P2.x-P1.x);
        BigInteger bp = BigInteger.valueOf(p);
         //System.out.println(bx1.toString()+" "+bp.toString());
@@ -103,8 +110,44 @@ public class ECC {
         return Pr;
     }
     
+    public Point Double(Point P1) {
+        long gr = -1;
+        Point Pr = new Point();
+        if(P1.y==0) {
+            Pr.makeInfinity();
+        }
+        else {
+            long atas = (3*(long)Math.pow(P1.x,2))+a; //System.out.println(atas);
+            long bawah = 2*P1.y; //System.out.println(bawah);
+            //BigInteger Batas = BigInteger.valueOf(atas);
+            BigInteger Bbawah = BigInteger.valueOf(bawah);
+            BigInteger Bp = BigInteger.valueOf(p);
+            //System.out.println(bx1.toString()+" "+bp.toString());
+            Bbawah = Bbawah.modInverse(Bp);
+            bawah = Bbawah.longValue(); //System.out.println(bawah);
+            gr = mod((atas * bawah),p);  //System.out.println(gr);
+            //System.out.println(gr);
+            long x = mod((long)Math.pow(gr,2)-(P1.x*2),p);
+            long y = mod((gr*(P1.x-x))-P1.y,p);
+            Pr.x = x; Pr.y = y;
+            //Long lBawah = Bbawah.longValue();
+            //long bawah = lBawah;
+        }
+        return Pr;
+    }   
+    
     public Point Multiply(Point P, long k) {
-        Point Pold = P;
+        Point Pr = new Point();
+        if(k==1) Pr = P;
+        else if(k==2) Pr = Double(P);
+        else {
+            Pr = Double( Multiply(P,k/2) );
+            if(k%2==1) {
+                Pr = Add(Pr,P);
+            }
+        }
+        return Pr;
+        /*Point Pold = P;
         Point Pr = new Point();
         if(P.y==0) Pr.makeInfinity();
         else {
@@ -116,7 +159,7 @@ public class ECC {
                 }
             }
         }
-        return Pr;
+        return Pr;*/
     }
     
     public Point iterate(long n){
