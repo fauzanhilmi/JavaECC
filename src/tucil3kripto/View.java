@@ -18,6 +18,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -306,10 +307,17 @@ public class View extends javax.swing.JApplet {
                 //data di encrypt dlu
                 String c = bytesToHex(data);
                 outputArea.setText(c);
+                ArrayList<PairPoint> ar= new ArrayList<PairPoint>();
+                
                 PrintWriter pw = new PrintWriter("encipher.txt","UTF-8");
-                String s = new String(data, "UTF-8");
-                System.out.println(s);
-                pw.println(s);
+                
+                for(int i=0;i<ar.size();i++){
+                    pw.println(ar.get(i).p1.x);
+                    pw.println(ar.get(i).p1.y);
+                    pw.println(ar.get(i).p2.x);
+                    pw.println(ar.get(i).p2.y);
+                }
+  
                 pw.close();
             } catch (IOException ex) {
                 Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
