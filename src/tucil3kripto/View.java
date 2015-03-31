@@ -14,6 +14,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -324,25 +325,49 @@ public class View extends javax.swing.JApplet {
                 byte[] data = Files.readAllBytes(file.toPath());
                 inputArea.setText(readFile(file.getAbsolutePath(), StandardCharsets.UTF_8));
                 //data di encrypt dlu
-                
+                long startTime = System.currentTimeMillis();
+ 
                 
                 ECC ecc = new ECC(a,b,p);
                 
                 ArrayList<PairPoint> ar = ecc.Encipher(data, 6, publicKey);
                 
-                String c = bytesToHex(data);
-                outputArea.setText(c);
+                String c = "";
+                
                 
                 PrintWriter pw = new PrintWriter("encipher.txt","UTF-8");
                 
+                
+                long endTime   = System.currentTimeMillis();
+                long totalTime = endTime - startTime;
+                timeLabel.setText("Time : "+totalTime+" ms");
+                
                 for(int i=0;i<ar.size();i++){
                     pw.println(ar.get(i).p1.x);
+                    ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+                    buffer.putLong(ar.get(i).p1.x);
+                    c+=bytesToHex(buffer.array());
                     
                     pw.println(ar.get(i).p1.y);
+                    buffer = ByteBuffer.allocate(Long.BYTES);
+                    buffer.putLong(ar.get(i).p1.y);
+                    c+=bytesToHex(buffer.array());
+                    
                     pw.println(ar.get(i).p2.x);
+                    buffer = ByteBuffer.allocate(Long.BYTES);
+                    buffer.putLong(ar.get(i).p2.x);
+                    c+=bytesToHex(buffer.array());
+                    
                     pw.println(ar.get(i).p2.y);
+                    buffer = ByteBuffer.allocate(Long.BYTES);
+                    buffer.putLong(ar.get(i).p2.y);
+                    c+=bytesToHex(buffer.array());
                 }
+                outputArea.setText(c);
+                inputLabel.setText("Size input : "+data.length+" byte");
+                outputLabel.setText("Size output : "+ar.size()*32+" byte");
   
+                
                 pw.close();
             } catch (IOException ex) {
                 Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
